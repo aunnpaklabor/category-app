@@ -3,5 +3,5 @@ import { CategorySelectorComponent } from './components/category-selector/catego
 
 export const routes: Routes = [
   { path: '', redirectTo: 'categories', pathMatch: 'full' },
-  { path: 'categories', component: CategorySelectorComponent }, // ชี้ตรงมาเลย ไม่ต้องมี page คั่น
+  { path: 'categories', component: CategorySelectorComponent },
 ];

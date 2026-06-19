@@ -7,7 +7,7 @@ import { CategoryService } from '../../services/category';
   selector: 'app-category-selector',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './category-selector.component.html'
+  templateUrl: './category-selector.component.html',
 })
 export class CategorySelectorComponent implements OnInit {
   private categoryService = inject(CategoryService);
@@ -17,13 +17,13 @@ export class CategorySelectorComponent implements OnInit {
   currentCategories = signal<Category[]>([]);
   historyStack = signal<Category[][]>([]);
   searchTerm = signal<string>('');
-  
-  // ใช้ตัวแปรนี้แสดงผลฝั่งขวาได้เลย ไม่ต้องยิง Event ออกข้างนอกแล้ว
-  selectedCategoryId = signal<number | null>(null); 
+  selectedCategoryId = signal<number | null>(null);
 
   displayCategories = computed(() => {
     const term = this.searchTerm().trim();
-    return term ? this.categoryService.searchInTree(this.allCategories(), term) : this.currentCategories();
+    return term
+      ? this.categoryService.searchInTree(this.allCategories(), term)
+      : this.currentCategories();
   });
 
   ngOnInit() {
@@ -33,19 +33,17 @@ export class CategorySelectorComponent implements OnInit {
           this.allCategories.set(data);
           this.currentCategories.set(data);
         },
-        error: (err) => console.error('Error:', err)
+        error: (err) => console.error('Error:', err),
       });
     }
   }
 
   onCategoryClick(cat: Category) {
     if (cat.isLeaf) {
-      // ถ้าเป็น Data (เลือกได้)
       this.selectedCategoryId.set(cat.id);
     } else if (cat.subcategories) {
-      // ถ้าเป็น Category (กดเข้าไปดูต่อ)
       this.selectedCategoryId.set(null);
-      this.historyStack.update(stack => [...stack, this.currentCategories()]);
+      this.historyStack.update((stack) => [...stack, this.currentCategories()]);
       this.currentCategories.set(cat.subcategories);
       this.searchTerm.set('');
     }
@@ -55,7 +53,7 @@ export class CategorySelectorComponent implements OnInit {
     const stack = this.historyStack();
     if (stack.length > 0) {
       this.currentCategories.set(stack[stack.length - 1]);
-      this.historyStack.update(s => s.slice(0, -1));
+      this.historyStack.update((s) => s.slice(0, -1));
       this.selectedCategoryId.set(null);
     }
   }

@@ -9,7 +9,6 @@ import { Category } from '../models/category.model';
 export class CategoryService {
   constructor(private http: HttpClient) {}
 
-  // โหลดข้อมูลจากไฟล์ JSON ใน assets
   getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>('assets/categories.json');
   }
@@ -23,7 +22,6 @@ export class CategoryService {
       if (cat.name.toLowerCase().includes(lowerQuery)) {
         results.push(cat);
       }
-      // ถ้ามีลูก ให้ดำน้ำลงไปหาในลูกต่อ
       if (cat.subcategories && cat.subcategories.length > 0) {
         const subResults = this.searchInTree(cat.subcategories, query);
         results = [...results, ...subResults];
